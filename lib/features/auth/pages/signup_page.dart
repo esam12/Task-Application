@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/features/auth/cubit/auth_cubit.dart';
 import 'package:frontend/features/auth/pages/signin_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -32,6 +34,11 @@ class _SignUpPageState extends State<SignUpPage> {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       // store data
+      context.read<AuthCubit>().signUp(
+            name: nameController.text,
+            email: emailController.text,
+            password: passwordController.text,
+          );
     } else {
       setState(() {
         autovalidateMode = AutovalidateMode.always;
@@ -43,86 +50,109 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Form(
-            key: formKey,
-            autovalidateMode: autovalidateMode,
-            child: Column(
-              spacing: 16.0,
-              children: [
-                SizedBox(height: 100),
-                Text(
-                  'Sign Up.',
-                  style: TextStyle(
-                    fontSize: 35.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+        child: BlocConsumer<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
                 ),
-                TextFormField(
-                  controller: nameController,
-                  onSaved: (newValue) => nameController.text = newValue!,
-                  decoration: InputDecoration(
-                    hintText: 'Name',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
+              );
+            } else if (state is AuthSignUp){
+               ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text("Account created! Login Now!"),
                 ),
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    hintText: 'Password',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
-                ElevatedButton(
-                  onPressed: signUp,
-                  child: Text(
-                    'SIGN UP',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).push(SignInPage.route()),
-                  child: Text.rich(
-                    TextSpan(
-                      text: 'Already have an account? ',
-                      style: Theme.of(context).textTheme.titleSmall,
-                      children: [
-                        TextSpan(
-                          text: 'Sign In',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+              );
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Form(
+                key: formKey,
+                autovalidateMode: autovalidateMode,
+                child: Column(
+                  spacing: 16.0,
+                  children: [
+                    SizedBox(height: 100),
+                    Text(
+                      'Sign Up.',
+                      style: TextStyle(
+                        fontSize: 35.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
+                    TextFormField(
+                      controller: nameController,
+                      onSaved: (newValue) => nameController.text = newValue!,
+                      decoration: InputDecoration(
+                        hintText: 'Name',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your name';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password';
+                        }
+                        return null;
+                      },
+                    ),
+                    ElevatedButton(
+                      onPressed: signUp,
+                      child: Text(
+                        'SIGN UP',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () =>
+                          Navigator.of(context).push(SignInPage.route()),
+                      child: Text.rich(
+                        TextSpan(
+                          text: 'Already have an account? ',
+                          style: Theme.of(context).textTheme.titleSmall,
+                          children: [
+                            TextSpan(
+                              text: 'Sign In',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
     );
