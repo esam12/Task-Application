@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/pages/signup_page.dart';
 
 class SignInPage extends StatefulWidget {
+  static MaterialPageRoute route() => MaterialPageRoute(
+        builder: (context) => SignInPage(),
+      );
   const SignInPage({super.key});
 
   @override
@@ -53,7 +57,6 @@ class _SignInPageState extends State<SignInPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              
                 TextFormField(
                   controller: emailController,
                   decoration: InputDecoration(
@@ -85,18 +88,21 @@ class _SignInPageState extends State<SignInPage> {
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: 'Don\'t have an account? ',
-                    style: Theme.of(context).textTheme.titleSmall,
-                    children: [
-                      TextSpan(
-                        text: 'Sign Up',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(SignUpPage.route()),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Don\'t have an account? ',
+                      style: Theme.of(context).textTheme.titleSmall,
+                      children: [
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],

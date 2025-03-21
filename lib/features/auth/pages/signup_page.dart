@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/pages/signin_page.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class SignUpPage extends StatefulWidget {
+  static MaterialPageRoute route() => MaterialPageRoute(
+        builder: (context) => SignUpPage(),
+      );
+  const SignUpPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -99,18 +103,21 @@ class _SignupPageState extends State<SignupPage> {
                     style: TextStyle(color: Colors.white, fontSize: 16.0),
                   ),
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: 'Already have an account? ',
-                    style: Theme.of(context).textTheme.titleSmall,
-                    children: [
-                      TextSpan(
-                        text: 'Sign In',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(SignInPage.route()),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Already have an account? ',
+                      style: Theme.of(context).textTheme.titleSmall,
+                      children: [
+                        TextSpan(
+                          text: 'Sign In',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 )
               ],
