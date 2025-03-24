@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/auth/cubit/auth_cubit.dart';
 import 'package:frontend/features/auth/pages/signup_page.dart';
+import 'package:frontend/features/home/pages/home_page.dart';
 
 class SignInPage extends StatefulWidget {
-  static MaterialPageRoute route() => MaterialPageRoute(
-        builder: (context) => SignInPage(),
-      );
+  static MaterialPageRoute route() =>
+      MaterialPageRoute(builder: (context) => SignInPage());
   const SignInPage({super.key});
 
   @override
@@ -55,11 +55,11 @@ class _SignInPageState extends State<SignInPage> {
                   content: Text(state.message),
                 ),
               );
-            } else if (state is AuthSignedIn){
-               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("You are Signed In!"),
-                ),
+            } else if (state is AuthSignedIn) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                HomePage.route(),
+                (_) => false,
               );
             }
           },
