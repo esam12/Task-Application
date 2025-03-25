@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:frontend/core/constants/constants.dart';
 import 'package:frontend/core/services/sp_service.dart';
+import 'package:frontend/features/auth/repository/auth_locale_repository.dart';
 import 'package:frontend/models/user_model.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRemoteRepository {
   final spServide = SpService();
+  final authLocalRepository = AuthLocaleRepository();
 
   Future<UserModel> signUp(
       {required String name,
@@ -45,6 +47,8 @@ class AuthRemoteRepository {
           {'email': email, 'password': password},
         ),
       );
+      print(res.body);
+      print(res.statusCode);
 
       if (res.statusCode != 201) {
         throw jsonDecode(res.body)['msg'];
@@ -85,7 +89,8 @@ class AuthRemoteRepository {
 
       return UserModel.fromJson(userResponse.body);
     } catch (_) {
-      return null;
+      final user = authLocalRepository.getUser();
+      return user;
     }
   }
 }
