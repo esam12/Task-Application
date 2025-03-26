@@ -47,13 +47,10 @@ class AuthRemoteRepository {
           {'email': email, 'password': password},
         ),
       );
-      print(res.body);
-      print(res.statusCode);
 
-      if (res.statusCode != 201) {
+      if (res.statusCode != 200) {
         throw jsonDecode(res.body)['msg'];
       }
-
       return UserModel.fromJson(res.body);
     } catch (e) {
       throw e.toString();
@@ -79,7 +76,7 @@ class AuthRemoteRepository {
       }
 
       final userResponse =
-          await http.post(Uri.parse('${Constants.backendUri}/auth'), headers: {
+          await http.get(Uri.parse('${Constants.backendUri}/auth'), headers: {
         'Content-Type': 'application/json',
         'x-auth-token': token,
       });
