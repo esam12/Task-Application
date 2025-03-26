@@ -58,8 +58,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   content: Text(state.message),
                 ),
               );
-            } else if (state is AuthSignUp){
-               ScaffoldMessenger.of(context).showSnackBar(
+            } else if (state is AuthSignUp) {
+              ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text("Account created! Login Now!"),
                 ),
