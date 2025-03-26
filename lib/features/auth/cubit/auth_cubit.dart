@@ -48,17 +48,14 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthLoading());
       final user =
           await _authRemoteRepository.signIn(email: email, password: password);
-      print(user);
       // store token
       if (user.token.isNotEmpty) {
         await spService.setToken(user.token);
       }
-      print(user.token);
 
       await _authLocaleRepository.insertUser(user);
       emit(AuthSignedIn(user));
     } catch (e) {
-      print(e.toString());
       emit(AuthError(e.toString()));
       throw e.toString();
     }
