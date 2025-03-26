@@ -23,7 +23,7 @@ class _SignInPageState extends State<SignInPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    formKey.currentState!.validate();
+    formKey.currentState?.validate();
 
     super.dispose();
   }
